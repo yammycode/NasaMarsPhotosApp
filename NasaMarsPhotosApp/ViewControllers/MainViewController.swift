@@ -22,8 +22,7 @@ final class MainViewController: UIViewController {
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let navigationVC = segue.destination as? UINavigationController else { return }
-                guard let galleryVC = navigationVC.topViewController as? GaleryTableViewController,
+        guard let galleryVC = segue.destination as? GaleryTableViewController,
               let gallery = sender as? Gallery else { return }
         galleryVC.photos = gallery.photos
     }
@@ -34,16 +33,16 @@ final class MainViewController: UIViewController {
         fetchPhotos()
     }
 
-    @IBAction func goToMars(_ sender: Any) {
-        destinationUrl = .marsURL
+
+    @IBAction func goToPressed(_ sender: UIButton) {
+        if sender.tag == 1 {
+            destinationUrl = .marsURL
+        } else {
+            destinationUrl = .fakeURL
+        }
         goToPlanet()
     }
-    
-    @IBAction func goToSwift(_ sender: Any) {
-        destinationUrl = .fakeURL
-        goToPlanet()
-    }
-    
+
 }
 
 // MARK: - Get photo from API extension
@@ -53,7 +52,9 @@ extension MainViewController {
         NetworkManager.shared.fetch(dataType: Gallery.self, from: destinationUrl) { [weak self] result in
             switch result {
             case .success(let gallery):
-                self?.performSegue(withIdentifier: "goToGalery", sender: gallery)
+                self?.buttonsStack.isHidden = false
+                self?.activityIndicator.stopAnimating()
+                self?.performSegue(withIdentifier: "goToPhotos", sender: gallery)
             case .failure(let error):
                 print(error)
                 self?.showAlert(stutus: .failed)
