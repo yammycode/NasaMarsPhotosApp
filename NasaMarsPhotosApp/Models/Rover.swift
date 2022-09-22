@@ -8,11 +8,11 @@
 struct Rover: Decodable {
     let id: Int
     let name: String
-    let landing_date: String
-    let launch_date: String
+    let landingDate: String
+    let launchDate: String
     let status: String
 
     var description: String {
-        "Марсоход \(id): \(name) (\(status)). Вылетел \(launch_date). Приземлился \(landing_date)"
+        "Марсоход \(id): \(name).\nВылетел \(launchDate).\nПриземлился \(landingDate)"
     }
 }

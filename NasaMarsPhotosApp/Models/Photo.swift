@@ -8,6 +8,6 @@
 struct Photo: Decodable {
     let camera: Camera
     let rover: Rover
-    let img_src: String
-    let earth_date: String
+    let imgSrc: String
+    let earthDate: String
 }

@@ -11,57 +11,54 @@ final class MainViewController: UIViewController {
 
     // MARK: - Outlets
     @IBOutlet var activityIndicator: UIActivityIndicatorView!
-
-    // MARK: - Private properties
-    private let apiUrl = "https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?sol=1000"
-    private let apiKey = "RjMhvElmaN0VSxNW0rCzcUoX7tvDQEhmFtNx7Won"
-
-    private var baseUrl: String {
-        "\(apiUrl)&api_key=\(apiKey)"
-    }
+    @IBOutlet var buttonsStack: UIStackView!
+    
+    private var destinationUrl: Link?
 
     // MARK: - Override methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        activityIndicator.startAnimating()
         activityIndicator.hidesWhenStopped = true
+    }
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let navigationVC = segue.destination as? UINavigationController else { return }
+                guard let galleryVC = navigationVC.topViewController as? GaleryTableViewController,
+              let gallery = sender as? Gallery else { return }
+        galleryVC.photos = gallery.photos
+    }
+
+    private func goToPlanet() {
+        buttonsStack.isHidden = true
+        activityIndicator.startAnimating()
         fetchPhotos()
     }
+
+    @IBAction func goToMars(_ sender: Any) {
+        destinationUrl = .marsURL
+        goToPlanet()
+    }
+    
+    @IBAction func goToSwift(_ sender: Any) {
+        destinationUrl = .fakeURL
+        goToPlanet()
+    }
+    
 }
 
 // MARK: - Get photo from API extension
 extension MainViewController {
     private func fetchPhotos() {
-        guard let url = URL(string: baseUrl) else { return }
-
-        URLSession.shared.dataTask(with: url) { data, _, error in
-            guard let data = data else {
-                print(error?.localizedDescription ?? "No error description")
-                self.showAlert(stutus: .failed)
-                return
+        guard let destinationUrl = destinationUrl else { return }
+        NetworkManager.shared.fetch(dataType: Gallery.self, from: destinationUrl) { [weak self] result in
+            switch result {
+            case .success(let gallery):
+                self?.performSegue(withIdentifier: "goToGalery", sender: gallery)
+            case .failure(let error):
+                print(error)
+                self?.showAlert(stutus: .failed)
             }
-
-            let jsonDecoder = JSONDecoder()
-
-            do {
-                let galery = try jsonDecoder.decode(Gallery.self, from: data)
-                
-                print(galery.photos)
-
-                for (index, photo) in galery.photos.enumerated() {
-                    print("Фото #\(index) от \(photo.earth_date). \(photo.rover.description). \(photo.camera.description)")
-                }
-
-                self.showAlert(stutus: .success)
-
-            } catch {
-                print(error.localizedDescription)
-                self.showAlert(stutus: .failed)
-            }
-            DispatchQueue.main.async {
-                self.activityIndicator.stopAnimating()
-            }
-        }.resume()
+        }
     }
 }
 
@@ -75,14 +72,14 @@ extension MainViewController {
         var title: String {
             switch self {
             case .success: return "Success"
-            case .failed: return "Failed"
+            case .failed: return "Отставить запуск!"
             }
         }
 
         var message: String {
             switch self {
             case .success: return  "You can see the results in the Debug aria"
-            case .failed: return "You can see error in the Debug aria"
+            case .failed: return "Похоже, погода не летная... Может, в другой раз."
             }
         }
     }
@@ -95,7 +92,11 @@ extension MainViewController {
                 preferredStyle: .alert
             )
 
-            let okAction = UIAlertAction(title: "OK", style: .default)
+            let okAction = UIAlertAction(title: "OK", style: .default) { _ in
+                self.buttonsStack.isHidden = false
+                self.activityIndicator.stopAnimating()
+            }
+
             alert.addAction(okAction)
             self.present(alert, animated: true)
         }

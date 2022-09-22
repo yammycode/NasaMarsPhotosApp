@@ -8,9 +8,9 @@
 struct Camera: Decodable {
     let id: Int
     let name: String
-    let full_name: String
+    let fullName: String
 
     var description: String {
-        "Камера \(id): \(full_name) (\(name))"
+        "Камера \(id): \(fullName) (\(name))"
     }
 }
