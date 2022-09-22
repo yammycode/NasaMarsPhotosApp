@@ -27,13 +27,7 @@ final class MainViewController: UIViewController {
         galleryVC.photos = gallery.photos
     }
 
-    private func goToPlanet() {
-        buttonsStack.isHidden = true
-        activityIndicator.startAnimating()
-        fetchPhotos()
-    }
-
-
+    // MARK: - IBOutlets
     @IBAction func goToPressed(_ sender: UIButton) {
         if sender.tag == 1 {
             destinationUrl = .marsURL
@@ -43,8 +37,12 @@ final class MainViewController: UIViewController {
         goToPlanet()
     }
 
-    @IBAction func prepareForUnwind(segue: UIStoryboardSegue) {
+    @IBAction func prepareForUnwind(segue: UIStoryboardSegue) {}
 
+    private func goToPlanet() {
+        buttonsStack.isHidden = true
+        activityIndicator.startAnimating()
+        fetchPhotos()
     }
 
 }
