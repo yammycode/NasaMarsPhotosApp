@@ -43,6 +43,10 @@ final class MainViewController: UIViewController {
         goToPlanet()
     }
 
+    @IBAction func prepareForUnwind(segue: UIStoryboardSegue) {
+
+    }
+
 }
 
 // MARK: - Get photo from API extension

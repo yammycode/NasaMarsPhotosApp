@@ -36,5 +36,8 @@ final class DetailViewController: UIViewController {
         }
     }
 
-    
+    @IBAction func backButtonPressed() {
+        performSegue(withIdentifier: "backToHome", sender: nil)
+    }
+
 }
