@@ -23,8 +23,8 @@ final class MainViewController: UIViewController {
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let galleryVC = segue.destination as? GaleryTableViewController,
-              let gallery = sender as? Gallery else { return }
-        galleryVC.photos = gallery.photos
+              let photos = sender as? [Photo] else { return }
+        galleryVC.photos = photos
     }
 
     // MARK: - IBOutlets
@@ -51,12 +51,12 @@ final class MainViewController: UIViewController {
 extension MainViewController {
     private func fetchPhotos() {
         guard let destinationUrl = destinationUrl else { return }
-        NetworkManager.shared.fetch(dataType: Gallery.self, from: destinationUrl) { [weak self] result in
+        NetworkManager.shared.fetch(from: destinationUrl) { [weak self] result in
             switch result {
-            case .success(let gallery):
+            case .success(let photos):
                 self?.buttonsStack.isHidden = false
                 self?.activityIndicator.stopAnimating()
-                self?.performSegue(withIdentifier: "goToPhotos", sender: gallery)
+                self?.performSegue(withIdentifier: "goToPhotos", sender: photos)
             case .failure(let error):
                 print(error)
                 self?.showAlert(stutus: .failed)

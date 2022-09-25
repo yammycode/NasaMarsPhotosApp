@@ -20,8 +20,8 @@ final class PhotoCell: UITableViewCell {
     }
 
     func configure(with photo: Photo) {
-        roverLabel.text = "Марсоход: \(photo.rover.name) (\(photo.rover.status))"
-        cameraLabel.text = "Камера: " + photo.camera.name
+        roverLabel.text = "Марсоход: \(photo.rover?.name ?? "") (\(photo.rover?.status ?? ""))"
+        cameraLabel.text = "Камера: " + (photo.camera?.name ?? "")
 
         NetworkManager.shared.fetchImage(from: photo.imgSrc) { [weak self] result in
             switch result {

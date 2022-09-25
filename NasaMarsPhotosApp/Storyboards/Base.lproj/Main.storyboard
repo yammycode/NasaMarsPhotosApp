@@ -136,6 +136,7 @@
                                     <outlet property="imageLoadingIndicator" destination="Txo-ET-m0s" id="bST-k9-dCN"/>
                                     <outlet property="photoImage" destination="06h-2X-v5W" id="ktn-6K-YHp"/>
                                     <outlet property="roverLabel" destination="CT7-YZ-2RK" id="jsT-9W-hjq"/>
+                                    <segue destination="sf6-BB-mmR" kind="presentation" id="v2D-9F-z3V"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -147,9 +148,6 @@
                     <navigationItem key="navigationItem" title="Мы на Марсе!" id="0bt-Pm-WtF">
                         <barButtonItem key="backBarButtonItem" title="Item" id="YEH-gX-Qiy"/>
                     </navigationItem>
-                    <connections>
-                        <segue destination="sf6-BB-mmR" kind="presentation" identifier="showPhoto" id="xai-Xp-YiC"/>
-                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="D9z-rC-FKP" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -194,7 +192,7 @@
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="Назад на Землю!"/>
                                 <connections>
-                                    <action selector="backButtonPressed" destination="sf6-BB-mmR" eventType="touchUpInside" id="xJ4-8q-H93"/>
+                                    <segue destination="RIa-qx-w0E" kind="unwind" unwindAction="prepareForUnwindWithSegue:" id="LXU-CM-hzm"/>
                                 </connections>
                             </button>
                         </subviews>

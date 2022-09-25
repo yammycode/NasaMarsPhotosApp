@@ -22,9 +22,14 @@ final class DetailViewController: UIViewController {
         imageLoadingIndicator.hidesWhenStopped = true
         imageLoadingIndicator.startAnimating()
 
-        roverLabel.text = photo.rover.description
-        cameraLabel.text = photo.camera.description
+        roverLabel.text = photo.rover?.description ?? ""
+        cameraLabel.text = photo.camera?.description ?? ""
 
+        fetchImage()
+
+    }
+
+    private func fetchImage() {
         NetworkManager.shared.fetchImage(from: photo.imgSrc) { [weak self] result in
             switch result {
             case .success(let imageDate):
@@ -35,9 +40,4 @@ final class DetailViewController: UIViewController {
             }
         }
     }
-
-    @IBAction func backButtonPressed() {
-        performSegue(withIdentifier: "backToHome", sender: nil)
-    }
-
 }

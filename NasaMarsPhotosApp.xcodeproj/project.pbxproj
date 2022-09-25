@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		C82404D628D5AA5800404816 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82404D528D5AA5800404816 /* MainViewController.swift */; };
-		C8A4F21328D4FEAA00EE7187 /* Gallery.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A4F21228D4FEAA00EE7187 /* Gallery.swift */; };
+		C851998828E0443700A6274B /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = C851998728E0443700A6274B /* Alamofire */; };
 		C8B8127728DC49040068316B /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B8127628DC49040068316B /* DetailViewController.swift */; };
 		C8D8C40D28D4F361005C1187 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D8C40C28D4F361005C1187 /* AppDelegate.swift */; };
 		C8D8C40F28D4F361005C1187 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D8C40E28D4F361005C1187 /* SceneDelegate.swift */; };
@@ -25,7 +25,6 @@
 
 /* Begin PBXFileReference section */
 		C82404D528D5AA5800404816 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
-		C8A4F21228D4FEAA00EE7187 /* Gallery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gallery.swift; sourceTree = "<group>"; };
 		C8B8127628DC49040068316B /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		C8D8C40928D4F361005C1187 /* NasaMarsPhotosApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NasaMarsPhotosApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8D8C40C28D4F361005C1187 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -47,6 +46,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C851998828E0443700A6274B /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -88,7 +88,6 @@
 				C8D8C42528D4F548005C1187 /* Camera.swift */,
 				C8D8C42728D4F5C8005C1187 /* Rover.swift */,
 				C8D8C42928D4F624005C1187 /* Photo.swift */,
-				C8A4F21228D4FEAA00EE7187 /* Gallery.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -147,6 +146,9 @@
 			dependencies = (
 			);
 			name = NasaMarsPhotosApp;
+			packageProductDependencies = (
+				C851998728E0443700A6274B /* Alamofire */,
+			);
 			productName = NasaMarsPhotosApp;
 			productReference = C8D8C40928D4F361005C1187 /* NasaMarsPhotosApp.app */;
 			productType = "com.apple.product-type.application";
@@ -175,6 +177,9 @@
 				Base,
 			);
 			mainGroup = C8D8C40028D4F361005C1187;
+			packageReferences = (
+				C851998628E0443700A6274B /* XCRemoteSwiftPackageReference "Alamofire" */,
+			);
 			productRefGroup = C8D8C40A28D4F361005C1187 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -205,7 +210,6 @@
 				C8B8127728DC49040068316B /* DetailViewController.swift in Sources */,
 				C8D8C42A28D4F624005C1187 /* Photo.swift in Sources */,
 				C8D8C42828D4F5C8005C1187 /* Rover.swift in Sources */,
-				C8A4F21328D4FEAA00EE7187 /* Gallery.swift in Sources */,
 				C8D8C42628D4F548005C1187 /* Camera.swift in Sources */,
 				C8EAA5C728DB9A5B00EB3871 /* GaleryTableViewController.swift in Sources */,
 				C8EAA5C528DB914A00EB3871 /* NetworkManager.swift in Sources */,
@@ -430,6 +434,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		C851998628E0443700A6274B /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C851998728E0443700A6274B /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C851998628E0443700A6274B /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = C8D8C40128D4F361005C1187 /* Project object */;
 }

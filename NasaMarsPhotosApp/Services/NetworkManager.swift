@@ -6,14 +6,17 @@
 //
 
 import Foundation
+import Alamofire
+
+typealias JsonItem = [String: Any]
 
 enum Link: String {
-    case marsURL = "https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?sol=1000"
-    case fakeURL = "https://api.nasa.gov/mars-photos/api/v1/fake-url?fake"
+    case marsURL = "/mars-photos/api/v1/rovers/curiosity/photos"
+    case fakeURL = "/mars-photos/api/v1/fake-url"
 }
 
-enum ApiKey: String {
-    case demo = "RjMhvElmaN0VSxNW0rCzcUoX7tvDQEhmFtNx7Won"
+enum ApiKey {
+    static let demo = "RjMhvElmaN0VSxNW0rCzcUoX7tvDQEhmFtNx7Won"
 }
 
 enum NetworkError: Error {
@@ -28,51 +31,48 @@ class NetworkManager {
 
     private init() {}
 
-    func fetchImage(from url: String?, completion: @escaping(Result<Data, NetworkError>) -> Void ) {
-
-        guard let url = URL(string: url ?? "") else {
-            completion(.failure(.invalidURL))
-            return
-        }
-
-        DispatchQueue.global().async {
-            guard let imageData = try? Data(contentsOf: url) else {
-                completion(.failure(.noData))
-                return
-            }
-            DispatchQueue.main.async {
-                completion(.success(imageData))
-            }
-        }
-    }
-
-    func fetch<T: Decodable>(dataType: T.Type, from url: Link , completion: @escaping(Result<T, NetworkError>) -> Void) {
-        guard let url = URL(string: getFullUrl(for: url)) else {
-            completion(.failure(.invalidURL))
-            return
-        }
-
-        URLSession.shared.dataTask(with: url) { (data, _, error) in
-            guard let data = data else {
-                completion(.failure(.noData))
-                print(error?.localizedDescription ?? "No error description")
-                return
-            }
-            do {
-                let decoder = JSONDecoder()
-                decoder.keyDecodingStrategy = .convertFromSnakeCase
-
-                let type = try decoder.decode(T.self, from: data)
-                DispatchQueue.main.async {
-                    completion(.success(type))
+    func fetchImage(from url: String, completion: @escaping(Result<Data, AFError>) -> Void) {
+        AF.request(url)
+            .responseData { response in
+                switch response.result {
+                case .success(let imageData):
+                    completion(.success(imageData))
+                case .failure(let error):
+                    completion(.failure(error))
                 }
-            } catch {
-                completion(.failure(.decodingError))
             }
-        }.resume()
     }
 
-    private func getFullUrl(for source: Link) -> String {
-        source.rawValue + "&api_key=" + ApiKey.demo.rawValue
+    func fetch(from apiUrl: Link , completion: @escaping(Result<[Photo], AFError>) -> Void) {
+        guard let url = getFullUrl(for: apiUrl) else { return }
+        
+        AF.request(url, method: .get)
+            .validate()
+            .responseJSON { response in
+                switch response.result {
+                case .success(let value):
+                    guard let value = value as? JsonItem else { return }
+                    let photos = Photo.getPhotos(from: value["photos"] ?? [])
+                    completion(.success(photos))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
+    }
+}
+
+// MARK: - get url extension
+extension NetworkManager {
+    private func getFullUrl(for source: Link) -> URL? {
+        var components = URLComponents()
+        components.scheme = "https"
+        components.host = "api.nasa.gov"
+        components.path = source.rawValue
+        components.queryItems = [
+            URLQueryItem(name: "api_key", value: ApiKey.demo),
+            URLQueryItem(name: "sol", value: "1000"),
+        ]
+
+        return components.url
     }
 }
